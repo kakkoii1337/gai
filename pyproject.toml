@@ -1,0 +1,39 @@
+[build-system]
+requires = [ "setuptools>=60", "setuptools-scm>=8.0","wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gaimace"
+version = "0.0.1"
+description = "Refer to https://gai-labs.github.io/gai for more information"
+readme = "README.md"
+classifiers = [ "Programming Language :: Python :: 3.10", "Development Status :: 3 - Alpha", "License :: OSI Approved :: MIT License", "Intended Audience :: Science/Research", "Intended Audience :: Developers", "Operating System :: OS Independent", "Topic :: Software Development", "Topic :: Software Development :: Libraries :: Python Modules", "Topic :: Scientific/Engineering :: Artificial Intelligence",]
+requires-python = ">=3.10"
+dependencies = [
+    "gai-sdk>=1.0.5",
+]
+authors = [
+    { name = "kakkoii1337", email = "kakkoii1337@gmail.com" }
+]
+license = { file = "LICENSE" }
+
+[project.urls]
+Documentation = "https://gai-labs.github.io/gai/docs"
+
+[tool.setuptools.package-data]
+gai = ["docker-compose.yml", "cli/artifacts/tools.txt", "gai.yml"]
+
+[tool.setuptools.packages.find]
+where = ["gai-mace/src","gai-persona/src"]
+include = ["gai.*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.2,<9.0",
+    "nox>=2024.4.15,<2025.0",
+    "twine>=5.1.1,<6.0",
+    "keyrings.alt>=5.0.1,<6.0",
+    "ipykernel>=6.29.5,<7.0",
+    "flake8>=7.1.1,<8.0",
+    "pytest-ordering>=0.6,<1.0"
+]

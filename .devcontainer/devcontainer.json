@@ -1,0 +1,31 @@
+//https://github.com/microsoft/vscode-dev-containers/blob/main/container-templates/docker-compose/.devcontainer/devcontainer.json
+//https://github.com/microsoft/vscode-dev-containers/blob/main/containers/python-3/.devcontainer/devcontainer.json
+{
+    "name": "gai",
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
+    "service": "devcontainer",
+    // Make sure this matches the bind mount in docker-compose.yml
+    "workspaceFolder": "/workspaces/gai",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-toolsai.jupyter",
+            ]
+        }
+    },
+    // "forwardPorts": [],
+    // "features": {
+    //     "ghcr.io/devcontainers/features/docker-in-docker:2.12.0": {
+    //         "version": "latest",
+    //         "moby": true
+    //     }
+    // },
+    "remoteUser": "kakkoii1337",
+    "postCreateCommand": "/bin/bash ${HOME}/postCreateCommand.sh"
+}

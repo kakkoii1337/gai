@@ -1,0 +1,14 @@
+[
+  {
+    "Id": "00000000-0000-0000-0000-000000000000",
+    "Name": "Simple Text Flow",
+    "Description": "Use this flow to generate a simple text response without tools",
+    "StateDiagram": "\n                stateDiagram-v2\n                INIT --> CRAFT_TEXT_PROMPT: next / on_CRAFT_PROMPT\n                CRAFT_TEXT_PROMPT --> GENERATE: next / on_GENERATE\n                GENERATE --> END: next / on_ERROR / has_error\n                GENERATE --> PROCESS: next / on_PROCESS / not_has_error\n                PROCESS --> END: next\n            "
+  },
+  {
+    "Id": "00000000-0000-0000-0000-000000000001",
+    "Name": "Composite Google Flow",
+    "Description": "Use this flow when you want the agent to decide whether to use the google tool or not",
+    "StateDiagram": "\n                stateDiagram-v2\n                INIT --> TOOL_CHOICE: next / on_TOOL_CHOICE\n\n                TOOL_CHOICE --> CRAFT_TEXT_PROMPT: next / on_CRAFT_PROMPT / use_text\n                    CRAFT_TEXT_PROMPT --> GENERATE: next / on_GENERATE\n                    GENERATE --> PROCESS: next / on_PROCESS / use_text\n                    PROCESS --> END : next\n\n                TOOL_CHOICE --> CRAFT_TOOL_PROMPT: next / on_CRAFT_PROMPT / use_google\n                    TOOL_CALL --> GOOGLE: next / on_GOOGLE / use_google\n                    GOOGLE --> GENERATE: next / on_GENERATE\n\n                TOOL_CHOICE --> CRAFT_TOOL_PROMPT: next / on_CRAFT_PROMPT / use_retrieval\n                    TOOL_CALL --> RETRIEVAL: next / on_RETRIEVAL / use_retrieval\n                    RETRIEVAL --> GENERATE: next / on_GENERATE\n\n                CRAFT_TOOL_PROMPT --> TOOL_CALL: next / on_TOOL_CALL\n            "
+  }
+]

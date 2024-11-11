@@ -44,7 +44,7 @@ async def on_chat(msg: Msg):
 async def streamer(mace_client: MaceClient):
     global response_q
     start_time = time.time()
-    timeout = 60
+    timeout = 120
     elapsed = 0
     content=""
     try:

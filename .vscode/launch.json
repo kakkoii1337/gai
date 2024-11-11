@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: gaimace",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "program": "${workspaceFolder}/gai-mace/src/gai/mace/user/api/main.py",
+            "args": [
+                "--nats",
+                "nats://nats01:4222",
+                "--ttt",
+                "http://gai-ttt-svr",
+                "--tti",
+                "http://gai-tti-svr"
+            ],
+            "justMyCode": false,
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Browser: Demo",
+            "request": "launch",
+            "type": "msedge",
+            "url": "http://localhost:5123",
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ],
+            "webRoot": "${workspaceFolder}/demo"
+        },
+    ]
+}

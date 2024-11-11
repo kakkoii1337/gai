@@ -52,8 +52,14 @@ if os.environ.get("GAIMACE_PERSONA_DIR",None):
 
 console.print(f"[yellow]connection={nats}[/]")
 
-# Setup APIs
 app = FastAPI()
+
+# Add this at the beginning, before your other routes
+@app.get("/")
+async def root():
+    return "gaimace"
+
+# Setup APIs
 app.include_router(profile_router)
 app.include_router(image_router)
 app.include_router(prompt_router)
@@ -89,7 +95,7 @@ mace_client:MaceClient=None
 async def startup_event():
     global mace_client
     mace_client = await MaceClient.create(
-        servers="nats://localhost:4222"
+        servers=nats
     )
     await mace_client.subscribe(async_chat_handler=on_chat)
     app.state.mace_client = mace_client
@@ -101,20 +107,24 @@ async def startup_event():
 
     # Either persona_dir or persona_name must be provided but persona_dir takes precedence
     import_dir=os.path.expanduser(persona_dir)
-    console.print(f"[yellow]import_dir={import_dir}[/]")
+    if os.path.exists(import_dir):
+        console.print(f"[green]MACE node importing persona from {import_dir}.")
 
-    builder = PersonaBuilder()
-    builder = await builder.import_async(import_dir=import_dir)
-    persona = builder.build()
-    if hasattr(persona,"ttt") and persona.ttt:
-        persona.ttt.url=ttt
-    if hasattr(persona,"rag") and persona.rag:
-        persona.rag.url=rag
+        builder = PersonaBuilder()
+        builder = await builder.import_async(import_dir=import_dir)
+        persona = builder.build()
+        if hasattr(persona,"ttt") and persona.ttt:
+            persona.ttt.url=ttt
+        if hasattr(persona,"rag") and persona.rag:
+            persona.rag.url=rag
 
-    node = await MaceServer.create(servers=nats, persona=persona)
-    thread = Thread(target=run_server_coroutine, args=(node,))
-    thread.start()
-            
+        node = await MaceServer.create(servers=nats, persona=persona)
+        thread = Thread(target=run_server_coroutine, args=(node,))
+        thread.start()
+    
+    else:
+        console.print(f"[pink]import_dir={import_dir}[/] not found. MACE node not started.")
+
 
 if __name__ == "__main__":
     logger.info("Gai Local App Server version 0.0.1")

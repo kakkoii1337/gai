@@ -1,0 +1,32 @@
+[
+    {
+        "Id": "Mm1GAmuGfs3VoA2sit0njabQGAZ75eyfszIkAxGY5e4",
+        "CollectionName": "00000000-0000-0000-0000-000000000000",
+        "ByteSize": 633805,
+        "FileName": "9281bd15-46cc-47c3-a6eb-05b4518ee004.pdf",
+        "FileType": "pdf",
+        "Source": "https://doi.org/10.48550/arXiv.2210.03629",
+        "Abstract": null,
+        "Authors": "",
+        "Title": "REACT: SYNERGIZING REASONING AND ACTING IN LANGUAGE MODELS",
+        "Publisher": "",
+        "PublishedDate": null,
+        "Comments": "",
+        "Keywords": "",
+        "CreatedAt": "2024-10-21T07:39:58.346674",
+        "UpdatedAt": "2024-10-21T08:35:40.145166",
+        "IsActive": true,
+        "ChunkGroups": [
+            {
+                "Id": "c5d81645-beab-4bc8-a7c5-a971009b77f0",
+                "DocumentId": "Mm1GAmuGfs3VoA2sit0njabQGAZ75eyfszIkAxGY5e4",
+                "SplitAlgo": "recursive_split",
+                "ChunkCount": 114,
+                "ChunkSize": 1000,
+                "Overlap": 100,
+                "IsActive": true,
+                "ChunksDir": "/tmp/chunks/734c0642f5674de1887f89009254e01c"
+            }
+        ]
+    }
+]
