@@ -16,4 +16,7 @@
     "python.terminal.activateEnvInCurrentTerminal": false,
     "python.terminal.activateEnvironment": true,
     "terminal.integrated.inheritEnv": false,
+    "python.locator": "js",
+    // clear node state
+    "debug.node.autoAttach": "disabled"
 }

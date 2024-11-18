@@ -15,11 +15,10 @@
             },
             "extensions": [
                 "ms-python.python",
-                "ms-toolsai.jupyter",
+                "ms-vscode.js-debug"
             ]
         }
     },
-    // "forwardPorts": [],
     // "features": {
     //     "ghcr.io/devcontainers/features/docker-in-docker:2.12.0": {
     //         "version": "latest",

@@ -10,6 +10,8 @@ services:
                 NODE_VERSION: "21.1.0"
                 USERNAME: "kakkoii1337"
                 CACHE_BUST: "1.0.152"
+        ports:
+            - "12033:12033"
         environment:
             LOG_LEVEL: "DEBUG"
             TZ: "Asia/Singapore"
