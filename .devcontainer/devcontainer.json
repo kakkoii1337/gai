@@ -15,7 +15,8 @@
             },
             "extensions": [
                 "ms-python.python",
-                "ms-vscode.js-debug"
+                "ms-vscode.js-debug",
+                "ms-toolsai.jupyter"
             ]
         }
     },

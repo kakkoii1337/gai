@@ -10,6 +10,31 @@
                 "cd demo && yarn dev"
             ],
             "problemMatcher": []
-        }
+        },
+        // MACE -----------------------------------------------------------------------------------------------------------------------------------------------
+        {
+            // Do not use docker-compose to build or devops_cli.py to build.
+            // Use this task to build so that the version is updated and the image is tagged with the version
+            "label": "Docker: [gaimace-node] build",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-c",
+                "gai docker build ${workspaceFolder}/gai-mace/src/gai/mace/node/pyproject.toml --dockercontext-path ${workspaceFolder}/gai-mace/src/gai/mace/node"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: [gaimace-node] push",
+            "type": "shell",
+            "command": "/bin/bash",
+            "args": [
+                "-c",
+                "gai docker push ${workspaceFolder}/gai-mace/src/gai/mace/node/pyproject.toml gaimace-node"
+                //"python ${workspaceFolder}/.vscode/devops_cli.py docker-push gai-ttt"
+            ],
+            "problemMatcher": []
+        },
+
     ]
 }

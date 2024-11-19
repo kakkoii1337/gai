@@ -101,7 +101,7 @@ async def startup_event():
     app.state.mace_client = mace_client
 
     # Mace Server
-    from gai.mace.server.mace_server import MaceServer      
+    from gai.mace.node.mace_server import MaceServer      
     from gai.persona.persona_builder import PersonaBuilder
     from gai.persona.profile.pydantic.ProvisionAgentPydantic import ProvisionAgentPydantic
 

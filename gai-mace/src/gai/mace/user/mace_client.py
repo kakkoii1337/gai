@@ -97,6 +97,7 @@ class MaceClient(GaiNetNode):
     async def rollcall_handler(self,msg):
         subject = msg.subject
         data=msg.data.decode()
+        logger.debug(f"rollcall_handler: {data}")
         self.rollcall_messages.append({
             "subject":subject,
             "data":data

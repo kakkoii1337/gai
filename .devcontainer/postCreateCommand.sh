@@ -9,7 +9,6 @@ pip install --upgrade \
     notebook \
     jupyterlab \
     ipywidgets \
-    ipykernel \
     pytest \
     ipykernel \
     nest-asyncio

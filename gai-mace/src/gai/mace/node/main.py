@@ -36,7 +36,7 @@ if os.environ.get("GAIMACE_PERSONA_DIR",None):
     persona_dir=os.environ["GAIMACE_PERSONA_DIR"]
 
 # MaceServer Class
-from gai.mace.server.mace_server import MaceServer      
+from gai.mace.node.mace_server import MaceServer      
 
 # Start Mace service
 async def main():
