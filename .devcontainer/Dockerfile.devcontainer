@@ -60,5 +60,6 @@ ENV HOME_PATH="/home/$USERNAME"
 
 # Create .gairc
 RUN echo "{\"app_dir\":\"${HOME_PATH}/.gai\"}" > ${HOME_PATH}/.gairc && mkdir -p ${HOME_PATH}/.gai
-COPY  --chown=${USERNAME} .devcontainer/gai.yml ${HOME_PATH}/.gai/gai.yml
+#COPY --chown=${USERNAME} /gai-mace/src/gai/mace/node/persona/data ${HOME_PATH}/.gai/persona/nodes
+COPY  --chown=${USERNAME} /gai.yml ${HOME_PATH}/.gai/gai.yml
 COPY  --chown=${USERNAME} .devcontainer/postCreateCommand.sh ${HOME_PATH}/postCreateCommand.sh

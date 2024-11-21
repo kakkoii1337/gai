@@ -1,7 +1,7 @@
 services:
 
     devcontainer:
-        image: kakkoii1337/gai_devcontainer:1.0.152
+        image: kakkoii1337/gai_devcontainer:1.0.153
         build:
             context: ..
             dockerfile: .devcontainer/Dockerfile.devcontainer
@@ -9,7 +9,7 @@ services:
                 VARIANT: "3.10-bullseye"
                 NODE_VERSION: "21.1.0"
                 USERNAME: "kakkoii1337"
-                CACHE_BUST: "1.0.152"
+                CACHE_BUST: "1.0.153"
         ports:
             - "12033:12033"
         environment:
@@ -20,7 +20,6 @@ services:
             - $HOME/.gai:/$HOME/.gai
             - ..:/workspaces/gai:cached
             - /var/run/docker.sock:/var/run/docker.sock
-
         # Overrides default command so things don't shut down after the process ends.
         command: sleep infinity
 
