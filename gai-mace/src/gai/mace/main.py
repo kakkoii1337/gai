@@ -4,20 +4,23 @@ import asyncio
 from threading import Thread    
 import argparse
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from rich.console import Console
 console=Console()
 from gai.lib.common.logging import getLogger
 logger = getLogger(__name__)
+from gai.mace.user.api.persona.persona_router import persona_router
+from gai.mace.user.api.dialogue.dialogue_router import dialogue_router,on_chat
+from gai.mace.user.mace_client import MaceClient
+from gai.mace.node.mace_server import MaceServer
 from gai.persona.profile.api.profile_router import profile_router
+from gai.persona.profile.pydantic.ProvisionAgentPydantic import ProvisionAgentPydantic
 from gai.persona.images.api.image_router import image_router
 from gai.persona.prompts.api.prompt_router import prompt_router
 from gai.persona.tools.api.tool_router import tool_router
 from gai.persona.docs.api.document_router import document_router
-from gai.mace.user.api.persona.persona_router import persona_router
-from gai.mace.user.api.dialogue.dialogue_router import dialogue_router,on_chat
-from gai.mace.user.mace_client import MaceClient
-from fastapi.middleware.cors import CORSMiddleware
+from gai.persona.persona_builder import PersonaBuilder
 
 # command-line arguments
 parser = argparse.ArgumentParser(description="Start Gai Agent service.")
@@ -40,8 +43,12 @@ rag=args.rag
 tti=args.tti
 
 # environment arguments
+if os.environ.get("GAIMACE_MODE",None):
+    mode=os.environ["GAIMACE_MODE"]
 if os.environ.get("GAIMACE_NATS",None):
     nats=os.environ["GAIMACE_NATS"]
+if os.environ.get("GAIMACE_PERSONA",None):
+    persona_name=os.environ["GAIMACE_PERSONA"]
 if os.environ.get("GAIMACE_TTT",None):
     ttt=os.environ["GAIMACE_TTT"]
 if os.environ.get("GAIMACE_RAG",None):
@@ -56,29 +63,18 @@ if mode == "node":
 import_dir=os.path.expanduser(persona_dir)
 
 # Report arguments
-console.print(f"[yellow]connection={nats}[/]")
-console.print(f"[yellow]import_dir={import_dir}[/]")
-console.print(f"[yellow]ttt={ttt}[/]")
-console.print(f"[yellow]rag={rag}[/]")
-console.print(f"[yellow]tti={tti}[/]")
+console.print(f"[yellow]connection={nats}[/yellow]")
+console.print(f"[yellow]import_dir={import_dir}[/yellow]")
+console.print(f"[yellow]ttt={ttt}[/yellow]")
+console.print(f"[yellow]rag={rag}[/yellow]")
+console.print(f"[yellow]tti={tti}[/yellow]")
 
 # Run Node
 async def run_node():
-    from gai.mace.node.mace_server import MaceServer
-
-    # Load provisioning details and build persona
-    from gai.persona.persona_builder import PersonaBuilder
-    from gai.persona.profile.pydantic.ProvisionAgentPydantic import ProvisionAgentPydantic
-
     # import persona
     builder = PersonaBuilder()
     builder = await builder.import_async(import_dir=import_dir)
     persona = builder.build()
-    if hasattr(persona,"ttt") and persona.ttt:
-        persona.ttt.url=ttt
-    if hasattr(persona,"rag") and persona.rag:
-        persona.rag.url=rag
-
     node = await MaceServer.create(
         servers=nats,
         persona=persona)
@@ -88,6 +84,35 @@ async def run_node():
 
 # Run User
 async def run_user(app):
+    # Start custom persona thread
+    async def start_persona():
+
+        # Either persona_dir or persona_name must be provided but persona_dir takes precedence
+        import_dir=os.path.expanduser(persona_dir)
+        if os.path.exists(import_dir):
+            console.print(f"[green]MACE node importing persona from {import_dir}.")
+
+            async def run_server():
+                builder = PersonaBuilder()
+                builder = await builder.import_async(import_dir=import_dir)
+                persona = builder.build()
+                if persona.ttt is None:
+                    from gai.ttt.client.ttt_client import TTTClient
+                    # Get the ttt from environment not from gai.yml
+                    persona.ttt = TTTClient({
+                        "url": f"{ttt}//gen/v1/chat/completions",
+                    })
+                node = await MaceServer.create(
+                    servers=nats,
+                    persona=persona)
+                await node.serve()
+
+            from gai.mace.node.thread_manager import ThreadManagerSingleton            
+            tm = ThreadManagerSingleton.GetInstance()
+            tm.run_thread("User", run_server)           
+            
+        else:
+            console.print(f"[pink]import_dir={import_dir}[/] not found. MACE node not started.")
 
     # Add this at the beginning, before your other routes
     @app.get("/")
@@ -112,55 +137,15 @@ async def run_user(app):
         allow_headers=["*"],  # Allow all headers or specify specific ones
     )
 
-    def run_server_coroutine(node):
-        # Set up a new event loop
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        try:
-            # Run the coroutine using the new event loop
-            loop.run_until_complete(node.serve())
-        finally:
-            loop.run_until_complete(loop.shutdown_asyncgens())  # Close all async generators
-            loop.close()  # Safely close the loop
-
     # Startup
-    mace_client:MaceClient=None
     @app.on_event("startup")
     async def startup_event():
-        global mace_client
         mace_client = await MaceClient.create(
             servers=nats
         )
         await mace_client.subscribe(async_chat_handler=on_chat)
         app.state.mace_client = mace_client
-
-        # Mace Server
-        from gai.mace.node.mace_server import MaceServer      
-        from gai.persona.persona_builder import PersonaBuilder
-        from gai.persona.profile.pydantic.ProvisionAgentPydantic import ProvisionAgentPydantic
-
-        # Either persona_dir or persona_name must be provided but persona_dir takes precedence
-        import_dir=os.path.expanduser(persona_dir)
-        if os.path.exists(import_dir):
-            console.print(f"[green]MACE node importing persona from {import_dir}.")
-
-            builder = PersonaBuilder()
-            builder = await builder.import_async(import_dir=import_dir)
-            persona = builder.build()
-            if hasattr(persona,"ttt") and persona.ttt:
-                persona.ttt.url=ttt
-            if hasattr(persona,"rag") and persona.rag:
-                persona.rag.url=rag
-
-            node = await MaceServer.create(servers=nats, persona=persona)
-            thread = Thread(target=run_server_coroutine, args=(node,))
-            thread.start()
-        
-        else:
-            console.print(f"[pink]import_dir={import_dir}[/] not found. MACE node not started.")
-
-
+        await start_persona()
 
 if __name__ == "__main__":
     if mode == "node":

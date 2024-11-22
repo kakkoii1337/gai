@@ -519,8 +519,6 @@
   version "5.16.7"
   resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.16.7.tgz#e27f901af792065efc9f3d75d74a66af7529a10a"
   integrity sha512-UrGwDJCXEszbDI7yV047BYU5A28eGJ79keTCP4cc74WyncuVrnurlmIRxaHL8YK+LI1Kzq+/JM52IAkNnv4u+Q==
-  dependencies:
-    "@babel/runtime" "^7.23.9"
 
 "@mui/material@^5.14.13":
   version "5.16.7"
@@ -1466,10 +1464,10 @@ functions-have-names@^1.2.3:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
-gai-ui@^0.0.62:
-  version "0.0.62"
-  resolved "https://registry.yarnpkg.com/gai-ui/-/gai-ui-0.0.62.tgz#e766f3d3a87c104965aa4b7631ff90acb500de9a"
-  integrity sha512-RFEJClipiyDY0eNgMh8sOw5zzC2gKqjwis8jPhTiu8zCFEyc+Vo+wgHG25wNpRG1Zv6m3COMgwFjUV8PlOeIqg==
+gai-ui@^0.0.63:
+  version "0.0.63"
+  resolved "https://registry.yarnpkg.com/gai-ui/-/gai-ui-0.0.63.tgz#b2eda968817fce1f87049e7ec2add5aa1caf5d35"
+  integrity sha512-+o7sVXmQMSvTtAEsLK5i0ZSnIxKxitmnEV4jqcmESXbG8BVKW20c5D7JlIXjslVP2IpwBst1J39Az2OuChyFtQ==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"

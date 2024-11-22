@@ -21,28 +21,28 @@ services:
     #     restart: always
     #     command: python -m debugpy --listen 0.0.0.0:5678 main.py
 
-    # gai-ttt-svr:
-    #     image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.6
-    #     container_name: gai-ttt-svr
-    #     environment:
-    #         DEFAULT_GENERATOR: "ttt-llamacpp-mistral7b"
-    #         LOG_LEVEL: "DEBUG"
-    #         TZ: "Asia/Singapore"
-    #         SWAGGER_URL: "/doc"
-    #     deploy:
-    #         resources:
-    #             reservations:
-    #                 devices:
-    #                     - driver: nvidia
-    #                       capabilities: [gpu]
-    #     volumes:
-    #         - ~/.gai:/root/.gai
-    #     ports:
-    #         - "12031:12031"
-    #         - "5678:5678"
-    #     restart: always
-    #     command: python -m debugpy --listen 0.0.0.0:5678 main.py
-    #     #command: sleep infinity
+    gai-ttt-svr:
+        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.6
+        container_name: gai-ttt-svr
+        environment:
+            DEFAULT_GENERATOR: "ttt-llamacpp-mistral7b"
+            LOG_LEVEL: "DEBUG"
+            TZ: "Asia/Singapore"
+            SWAGGER_URL: "/doc"
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          capabilities: [gpu]
+        volumes:
+            - ~/.gai:/root/.gai
+        ports:
+            - "12031:12031"
+            - "5678:5678"
+        restart: always
+        command: python -m debugpy --listen 0.0.0.0:5678 main.py
+        #command: sleep infinity
 
     # gai-rag-svr:
     #     image: kakkoii1337/gai-rag-svr:1.0.18
@@ -67,23 +67,23 @@ services:
     #     command: python -m debugpy --listen 0.0.0.0:5679 main.py
     #     #command: sleep infinity
 
-    # gai-tti-svr:
-    #     image: kakkoii1337/gai-tti-svr:1.0.9
-    #     container_name: gai-tti-svr
-    #     environment:
-    #         CLI_ARGS: "--listen --api --xformers --medvram --no-download-sd-model --ckpt /stable-diffusion-webui/models/Stable-diffusion/runwayml/v1-5-pruned-emaonly.safetensors"
-    #     deploy:
-    #         resources:
-    #             reservations:
-    #                 devices:
-    #                     - capabilities: [gpu]
-    #                       driver: nvidia
-    #                       count: all
-    #     ports:
-    #         - "12035:12035"
-    #     volumes:
-    #         - ~/.gai/models/Stable-diffusion:/stable-diffusion-webui/models/Stable-diffusion
-    #         - ~/.gai/models/VAE:/stable-diffusion-webui/models/VAE
+    gai-tti-svr:
+        image: kakkoii1337/gai-tti-svr:1.0.9
+        container_name: gai-tti-svr
+        environment:
+            CLI_ARGS: "--listen --api --xformers --medvram --no-download-sd-model --ckpt /stable-diffusion-webui/models/Stable-diffusion/runwayml/v1-5-pruned-emaonly.safetensors"
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities: [gpu]
+                          driver: nvidia
+                          count: all
+        ports:
+            - "12035:12035"
+        volumes:
+            - ~/.gai/models/Stable-diffusion:/stable-diffusion-webui/models/Stable-diffusion
+            - ~/.gai/models/VAE:/stable-diffusion-webui/models/VAE
 
     nats01:
         image: nats:latest
@@ -101,57 +101,12 @@ services:
             # - "nats://nats03:6224"
         restart: unless-stopped
 
-    # gaimace-node-01:
-    #     image: kakkoii1337/gaimace-node:1.0.47
-    #     container_name: gaimace-node-01
-    #     environment:
-    #         LOG_LEVEL: "INFO"
-    #         TZ: "Asia/Singapore"
-    #         SWAGGER_URL: "/doc"
-    #         GAIMACE_PERSONA: "Sara"
-    #         GAIMACE_PERSONA_DIR: "/root/.gai/persona/data"
-    #         GAIMACE_NATS: "nats://nats01:4222"
-    #         GAIMACE_TTT: "http://gai-ttt-svr:12031"
-    #         GAIMACE_RAG: "http://gai-rag-svr:12036"
-    #     deploy:
-    #         resources:
-    #             reservations:
-    #                 devices:
-    #                     - driver: nvidia
-    #                       capabilities: [gpu]
-    #     ports:
-    #         - "12037:12037"
-    #     restart: always
-
-    # gaimace-node-02:
-    #     image: kakkoii1337/gaimace-node:1.0.57
-    #     container_name: gaimace-node-02
-    #     environment:
-    #         LOG_LEVEL: "INFO"
-    #         TZ: "Asia/Singapore"
-    #         SWAGGER_URL: "/doc"
-    #         GAIMACE_PERSONA: "Diana"
-    #         GAIMACE_PERSONA_DIR: "/root/.gai/persona/data"
-    #         GAIMACE_NATS: "nats://nats01:4222"
-    #         GAIMACE_TTT: "http://gai-ttt-svr:12031"
-    #         GAIMACE_RAG: "http://gai-rag-svr:12036"
-    #     deploy:
-    #         resources:
-    #             reservations:
-    #                 devices:
-    #                     - driver: nvidia
-    #                       capabilities: [gpu]
-    #     restart: always
-
-    gaimace-node-03:
-        image: kakkoii1337/gaimace-node:1.0.57
-        container_name: gaimace-node-03
+    gaimace-node-01:
+        image: kakkoii1337/gaimace:1.0.68
+        container_name: gaimace-node-01
         environment:
-            LOG_LEVEL: "INFO"
-            TZ: "Asia/Singapore"
-            SWAGGER_URL: "/doc"
-            GAIMACE_PERSONA: "George"
-            GAIMACE_PERSONA_DIR: "/root/.gai/persona/data"
+            LOG_LEVEL: "DEBUG"
+            GAIMACE_MODE: "user"
             GAIMACE_NATS: "nats://nats01:4222"
             GAIMACE_TTT: "http://gai-ttt-svr:12031"
             GAIMACE_RAG: "http://gai-rag-svr:12036"
@@ -161,4 +116,25 @@ services:
                     devices:
                         - driver: nvidia
                           capabilities: [gpu]
+        volumes:
+            - ~/.gai:/root/.gai
+        ports:
+            - "12033:12033"
         restart: always
+
+    gaimace-node-02:
+        image: kakkoii1337/gaimace:1.0.68
+        container_name: gaimace-node-02
+        environment:
+            LOG_LEVEL: "DEBUG"
+            GAIMACE_MODE: "node"
+            GAIMACE_PERSONA: "Diana"
+            GAIMACE_NATS: "nats://nats01:4222"
+            GAIMACE_TTT: "http://gai-ttt-svr:12031"
+            GAIMACE_RAG: "http://gai-rag-svr:12036"
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          capabilities: [gpu]

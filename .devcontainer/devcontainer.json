@@ -15,8 +15,10 @@
             },
             "extensions": [
                 "ms-python.python",
+                "ms-python.debugpy",
                 "ms-vscode.js-debug",
-                "ms-toolsai.jupyter"
+                "ms-toolsai.jupyter",
+                "KevinRose.vsc-python-indent"
             ]
         }
     },

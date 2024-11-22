@@ -46,5 +46,5 @@ TTT:
     top_k: 50
     timeout: 60.0
     type: ttt
-    url: http://localhost:12031/gen/v1/chat/completions
+    url: http://gai-ttt-svr:12031/gen/v1/chat/completions
 UsageType: private

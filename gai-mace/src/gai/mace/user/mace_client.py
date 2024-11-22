@@ -97,13 +97,24 @@ class MaceClient(GaiNetNode):
     async def rollcall_handler(self,msg):
         subject = msg.subject
         data=msg.data.decode()
-        logger.debug(f"rollcall_handler: {data}")
+
+        if data:
+            log_data = json.loads(data)
+            if log_data.get("Image64",None):
+                log_data["Image64"] = "..."
+            if log_data.get("Image128",None):
+                log_data["Image128"] = "..."
+            logger.debug(f"mace_client.rollcall_handler: {log_data}")
+        else:
+            logger.debug(f"mace_client.rollcall_handler: {data}")
+            return
+
         self.rollcall_messages.append({
             "subject":subject,
             "data":data
         })
         name=json.loads(data)["Name"]
-        logger.debug(f"system.rollcall: {name}")
+        logger.debug(f"mace_client.rollcall_handler: {name}")
 
     async def rollcall(self):
         logger.info(f"start rollcall")

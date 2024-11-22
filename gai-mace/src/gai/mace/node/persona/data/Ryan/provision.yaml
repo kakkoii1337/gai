@@ -87,8 +87,8 @@ ImageDataUrl: null
 Name: Ryan
 RAG:
     type: rag
-    url: http://localhost:12036/gen/v1/rag
-    ws_url: ws://localhost:12036/gen/v1/rag/index-file/ws
+    url: http://gai-rag-svr:12036/gen/v1/rag
+    ws_url: ws://gai-rag-svr:12036/gen/v1/rag/index-file/ws
 TTT:
     stop_conditions:
         - "<|im_end|>"
@@ -98,5 +98,5 @@ TTT:
     temperature: 0.7
     timeout: 60.0
     type: ttt
-    url: http://localhost:12031/gen/v1/chat/completions
+    url: http://gai-ttt-svr:12031/gen/v1/chat/completions
 UsageType: private

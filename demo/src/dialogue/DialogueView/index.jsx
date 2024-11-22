@@ -67,7 +67,9 @@ const DialogueView = () => {
                 <AvatarChatHistory handleViewThoughts={handleViewMonologue} />
             </ScrollableMessageBox>
 
-            {selectedPersona && <StreamChatBox setContent={setContent} />}
+            {selectedPersona && 
+                <StreamChatBox setContent={setContent} />
+            }
             <Box
                 sx={{
                     display: "flex",

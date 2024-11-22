@@ -20,7 +20,7 @@
             "command": "/bin/bash",
             "args": [
                 "-c",
-                "gai docker build ${workspaceFolder}/gai-mace/src/gai/mace/node/pyproject.toml --dockercontext-path ${workspaceFolder}/gai-mace/src/gai/mace/node"
+                "gai docker build ${workspaceFolder}/pyproject.toml"
             ],
             "problemMatcher": []
         },
@@ -30,11 +30,10 @@
             "command": "/bin/bash",
             "args": [
                 "-c",
-                "gai docker push ${workspaceFolder}/gai-mace/src/gai/mace/node/pyproject.toml gaimace-node"
+                "gai docker push ${workspaceFolder}/pyproject.toml"
                 //"python ${workspaceFolder}/.vscode/devops_cli.py docker-push gai-ttt"
             ],
             "problemMatcher": []
         },
-
     ]
 }

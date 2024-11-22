@@ -58,8 +58,14 @@ RUN rm -rf /tmp/library-scripts
 ENV USERNAME=${USERNAME}
 ENV HOME_PATH="/home/$USERNAME"
 
+# install VS Code (code-server)
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+RUN code-server --install-extension redhat.vscode-yaml \
+                --install-extension ms-python.debugpy \
+                --install-extension ms-toolsai.jupyter
+
 # Create .gairc
 RUN echo "{\"app_dir\":\"${HOME_PATH}/.gai\"}" > ${HOME_PATH}/.gairc && mkdir -p ${HOME_PATH}/.gai
-#COPY --chown=${USERNAME} /gai-mace/src/gai/mace/node/persona/data ${HOME_PATH}/.gai/persona/nodes
-COPY  --chown=${USERNAME} /gai.yml ${HOME_PATH}/.gai/gai.yml
+
+# The postCreateCommand.sh script will copy the data files fromm the mounted volume to the workspace
 COPY  --chown=${USERNAME} .devcontainer/postCreateCommand.sh ${HOME_PATH}/postCreateCommand.sh

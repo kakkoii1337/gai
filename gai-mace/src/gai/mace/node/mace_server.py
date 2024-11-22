@@ -2,6 +2,7 @@ import json
 import os
 import base64
 import time
+import asyncio
 from nats.aio.msg import Msg
 
 from gai.lib.common.logging import getLogger
@@ -12,6 +13,7 @@ from gai.mace.pydantic.FlowMessagePydantic import FlowMessagePydantic
 from gai.persona.persona_builder import PersonaBuilder
 from gai.lib.dialogue.dialogue_store import DialogueStore
 from gai.lib.dialogue.pydantic.DialogueMessagePydantic import DialogueMessagePydantic
+from gai.mace.node.thread_manager import ThreadManagerSingleton
 
 class MaceServer(GaiNetNode):
 
@@ -19,11 +21,13 @@ class MaceServer(GaiNetNode):
     subscribed={}
 
 
-    def __init__(self, servers, persona):
+    def __init__(self, servers, persona, is_user=False):
         super().__init__(servers,persona.agent_profile.Name)
         self.persona = persona
         self.other_content=""
         self.dialogue_store=persona.dialogue_store
+        self.is_user=is_user
+        self.subs=[]
 
     def _strip_xml(self,message):
         import re
@@ -31,8 +35,8 @@ class MaceServer(GaiNetNode):
         return re.sub(r'^<[^>]+>|<[^>]+>$', '', message)
 
     @staticmethod
-    async def create(servers,persona):
-        node = MaceServer(servers=servers, persona=persona)
+    async def create(servers,persona,is_user=False):
+        node = MaceServer(servers=servers, persona=persona,is_user=is_user)
         await node.connect()
         return node
 
@@ -57,34 +61,6 @@ class MaceServer(GaiNetNode):
             "Image128": image_base64
         }        
         await self.send_raw(reply,json.dumps(response))
-
-    # async def broadcast_handler(self,msg):
-    #     subject=msg.subject
-    #     data=msg.data.decode()
-    #     reply=msg.reply
-    #     self.messages.append({
-    #         "subject":subject,
-    #         "data":data
-    #     })
-
-    #     # generate llm response
-    #     data=json.loads(data)
-    #     message  = data["content"]
-    #     message_id = data["message_id"]
-    #     response = self.persona.act(message)
-
-    #     # stream chunk
-    #     chunk_id = 0
-    #     for chunk in response:
-    #         payload = {
-    #             "name":self.node_name,
-    #             "message_id":message_id,
-    #             "chunk_id":chunk_id,
-    #             "content":chunk
-    #         }
-    #         await self.send_raw(reply, json.dumps(payload))
-    #         await self.flush()
-    #         chunk_id+=1
 
     async def _send_reply(self,
             dialogue_id,
@@ -182,14 +158,6 @@ class MaceServer(GaiNetNode):
         data=json.loads(data)
         pydantic = FlowMessagePydantic(**data)
 
-        # if DialogueStore.dialogue_id != pydantic.DialogueId:
-        #    raise Exception("DialogueID mismatch!")
-        # if DialogueStore.round_no != pydantic.RoundNo:
-        #    if pydantic.RoundNo > DialogueStore.round_no and pydantic.TurnNo > 0:
-        #        logger.warning(f"Expecting round {DialogueStore.round_no} and turn {DialogueStore.turn_no+1} but received round {pydantic.RoundNo} and turn {pydantic.TurnNo}.")
-        # DialogueStore.round_no = pydantic.RoundNo
-        # DialogueStore.turn_no = pydantic.TurnNo
-
         # Exception Case: Message from self to anyone
         if pydantic.Sender == self.node_name:
             # ignore message from self
@@ -201,25 +169,10 @@ class MaceServer(GaiNetNode):
 
         # Case 1: Message from user to others
         if pydantic.Sender == "User" and pydantic.Recipient != self.node_name:
-
-            # If step came from user, save user message
-            # self.dialogue_store.add_user_message(
-            #     user_id=self.persona.caller_id,
-            #     content=pydantic.Content + f" {pydantic.Recipient}, let's begin with you.",
-            #     timestamp=int(time.time())
-            #     )
-
             return
 
         # Case 2: Message from user to this node
         if pydantic.Sender == "User" and pydantic.Recipient == self.node_name:
-
-            # If step came from user, save user message
-            # self.dialogue_store.add_user_message(
-            #     user_id=self.persona.caller_id,
-            #     content=pydantic.Content + f" {pydantic.Recipient}, let's begin with you.",
-            #     timestamp=int(time.time())
-            #     )
 
             # Reply to user
             assistant_message = await self._send_reply(
@@ -236,34 +189,51 @@ class MaceServer(GaiNetNode):
 
         # Case 3: Other reply to User
         if pydantic.Sender != "User" and pydantic.Recipient == "User":
-            
-        #     if pydantic.Chunk:
-        #         self.other_content+=pydantic.Chunk
-
-        #     if pydantic.ChunkNo=="<eom>":
-        #         self.other_content = self._strip_xml(self.other_content)
-        #         self.dialogue_store.add_assistant_message(name=pydantic.Sender,content=self.other_content)
-        #         self.other_content=""
-
             return
 
         raise Exception(f"Unhandled case: Sender={pydantic.Sender} Recipient={pydantic.Recipient}")
 
+    async def listen(self):
+        # Keep the subscriber running
+        try:
+            is_stopped=False
+            if self.is_user:
+                tm = ThreadManagerSingleton.GetInstance()
+                is_stopped=tm.is_stopped(name="User")
+            while not is_stopped:
+                await asyncio.sleep(1)
+                if self.is_user:
+                    is_stopped=tm.is_stopped(name="User")
+        except KeyboardInterrupt:
+            pass
+        finally:
+            # Close the connection
+            await self.stop()
+
     async def serve(self):
-        logger.info("Server is starting to serve.")
+        logger.info("MaceServer.listen: Server is starting to serve.")
 
         key="system.rollcall"
         handler=self.rollcall_handler
         if not self.subscribed.get(key,None):
-            await self.nc.subscribe(key, cb=handler)
+            self.subs.append(await self.nc.subscribe(key, cb=handler))
             self.subscribed[key]=True
 
         key="dialogue.>"
         handler=self.dialogue_handler
         if not self.subscribed.get(key,None):
-            await self.nc.subscribe(key, cb=handler)
+            self.subs.append(await self.nc.subscribe(key, cb=handler))
             self.subscribed[key]=True
 
-
-        #await self.nc.subscribe("broadcast.>", cb=self.broadcast_handler)
         await self.listen()
+
+    async def stop(self):
+        logger.info(f"MaceServer.listen: Server stopped. Persona={self.persona.agent_profile.Name}")
+        for sub in self.subs:
+            await sub.unsubscribe()
+        for key in self.subscribed.keys():
+            self.subscribed[key]=False
+        await self.nc.flush()
+        await self.nc.drain()
+        if self.nc.is_connected:
+            await self.nc.close()

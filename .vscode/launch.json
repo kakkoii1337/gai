@@ -7,17 +7,22 @@
             "request": "launch",
             "console": "integratedTerminal",
             "env": {
-                "PYTHONUNBUFFERED": "1"
+                "PYTHONUNBUFFERED": "1",
+                "GAIMACE_MODE": "user",
+                "GAIMACE_NATS": "nats://nats01:4222",
+                "GAIMACE_TTT": "http://gai-ttt-svr:12031",
             },
-            "program": "${workspaceFolder}/gai-mace/src/gai/mace/user/api/main.py",
-            "args": [
-                "--nats",
-                "nats://nats01:4222",
-                "--ttt",
-                "http://gai-ttt-svr",
-                "--tti",
-                "http://gai-tti-svr"
-            ],
+            "program": "${workspaceFolder}/gai-mace/src/gai/mace/main.py",
+            // "args": [
+            //     "--mode",
+            //     "user",
+            //     "--nats",
+            //     "nats://nats01:4222",
+            //     "--ttt",
+            //     "http://gai-ttt-svr",
+            //     "--tti",
+            //     "http://gai-tti-svr"
+            // ],
             "justMyCode": false,
         },
         {
@@ -38,6 +43,22 @@
                 "--remote-debugging-port=9222"
             ],
             "webRoot": "${workspaceFolder}/demo"
+        },
+        {
+            "name": "Python Debugger: Christine",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUNBUFFERED": "1",
+                "GAIMACE_PERSONA": "Christine",
+                "GAIMACE_MODE": "node",
+                "GAIMACE_NATS": "nats://nats01:4222",
+                "GAIMACE_TTT": "http://gai-ttt-svr:12031",
+            },
+            "program": "${workspaceFolder}/gai-mace/src/gai/mace/main.py",
+            "args": [],
+            "justMyCode": false,
         },
     ]
 }

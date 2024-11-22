@@ -41,6 +41,6 @@ TTT:
     temperature: 0.7
     timeout: 60.0
     type: ttt
-    url: http://192.168.1.200:12031/gen/v1/chat/completions
+    url: http://gai-ttt-svr:12031/gen/v1/chat/completions
 
 UsageType: private
