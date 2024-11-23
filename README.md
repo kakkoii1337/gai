@@ -44,32 +44,32 @@ To run Gaimace, you need the following pre-requisites:
 
 ## Installation
 
-1. Open Terminal and install gai-sdk
+**Step 1.** Open Terminal and install gai-sdk
 
 ```bash
 pip install gai-sdk
 ```
 
-2. Initialize Gai directory
+**Step 2.** Initialize Gai directory
 
 ```bash
 gai init
 ```
 
-3. Pull the Dolphine model. The model is around 6GB in size and will take some time to download.
+**Step 3.** Pull the Dolphin model. The model is around 4GB+ in size and will take some time to download.
 
 ```bash
 gai pull exllamav2-dolphin
 ```
 
-## Open Repository
+**Step 4.** Clone this repository (https://github.com/kakkoii1337/gai)
 
-1. Clone this repository (https://github.com/kakkoii1337/gai)
+**Step 5.** Open in Visual Studio Code
 
-2. Open in Visual Studio Code
+**Step 6.** Click on bottom-left corner on the blue button and select "Reopen in Container"
 
-3. Click on bottom-left corner on the blue button and select "Reopen in Container"
+    ![Reopen in Container](/docs/img/dev-container.png)
 
-4. Wait for the container to build the docker images.
+**Step 7.** Wait for the container to build the docker images.
 
-Once the devcontainer is ready, refer to (/docs/01_getting_started.ipynb)[/docs/01_getting_started.ipynb] and get started.
+Once the devcontainer is ready, refer to this link [Getting Started](/docs/01_getting_started.ipynb) and get started.
