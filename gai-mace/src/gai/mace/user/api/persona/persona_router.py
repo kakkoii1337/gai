@@ -1,25 +1,64 @@
+import os
 import json
 import asyncio
 import base64
 from io import BytesIO
 from typing import Dict
+from time import sleep
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import StreamingResponse,JSONResponse
-
+from gai.persona.persona_builder import PersonaBuilder
+from gai.ttt.client.ttt_client import TTTClient
+from gai.mace.user.api.dependencies import get_settings, Settings, get_imagecache, ImageCache
 from gai.lib.common.logging import getLogger
+from gai.mace.node.mace_server import MaceServer
+
 logger = getLogger(__name__)
+
+CUSTOM_PERSONA_DIR = "~/.gai/persona/00000000-0000-0000-0000-000000000000"
 
 # Implementations Below
 persona_router = APIRouter()
-image_storage: Dict[str, bytes] = {}
-thumbnail_storage: Dict[str, bytes] = {}
 
 ################################ PERSONAS ################################
 
+@persona_router.get("/api/v1/settings")
+async def get_settings_endpoint(settings: Settings = Depends(get_settings)):
+    return settings
+
+# POST "/api/v1/user/persona"
+@persona_router.post("/api/v1/user/persona")
+async def post_user_persona_reload(settings: Settings = Depends(get_settings)):
+
+    import_dir=os.path.expanduser(CUSTOM_PERSONA_DIR)
+    if not os.path.exists(import_dir):
+        logger.warn(f"[magenta]Custom persona is not created yet. Abort loading persona thread.[/magenta]")
+        return
+    logger.info(f"[green]MACE node importing persona from {import_dir}.")
+    
+    async def run_server():
+        builder = PersonaBuilder()
+        builder = await builder.import_async(import_dir=import_dir)
+        persona = builder.build()
+        if persona.ttt is None:
+            # Get the ttt from environment not from gai.yml
+            persona.ttt = TTTClient({
+                "url": f"{settings.TTT}//gen/v1/chat/completions",
+            })
+        node = await MaceServer.create(
+            servers=settings.NATS,
+            persona=persona)
+        await node.serve()
+
+    from gai.mace.node.thread_manager import ThreadManagerSingleton            
+    tm = ThreadManagerSingleton.GetInstance()
+    if tm.is_stopped("User"):
+        tm.run_thread("User", run_server)           
+
 # GET "/api/v1/user/personas"
 @persona_router.get("/api/v1/user/personas")
-async def get_dialogue_participants(request: Request):
+async def get_dialogue_participants(request: Request,imagecache: ImageCache = Depends(get_imagecache)):
     mace_client = request.app.state.mace_client
     await mace_client.rollcall()
     personas=[]
@@ -31,12 +70,12 @@ async def get_dialogue_participants(request: Request):
         desc=data["AgentDescription"]
         image_url = f"http://localhost:12033/api/v1/persona/{name}/image"
         thumbnail_url = f"http://localhost:12033/api/v1/persona/{name}/thumbnail"
-        if not image_storage.get(name,None):
+        if not imagecache.Image128.get(name, None):
             # 128x128
-            image_storage[name] = base64.b64decode(data["Image128"])
-        if not thumbnail_storage.get(name,None):
+            imagecache.Image128[name] = base64.b64decode(data["Image128"])
+        if not imagecache.Image64.get(name, None):
             # 64x64
-            thumbnail_storage[name] = base64.b64decode(data["Image64"])
+            imagecache.Image64[name] = base64.b64decode(data["Image64"])
 
         data = {
             "Name":name,
@@ -52,18 +91,16 @@ async def get_dialogue_participants(request: Request):
 
 # GET "/api/v1/user/persona/{persona_name}/image"
 @persona_router.get("/api/v1/persona/{persona_name}/image")
-async def get_persona_image(persona_name:str):
-    if not image_storage.get(persona_name):
-        await get_dialogue_participants()
-    response = StreamingResponse(BytesIO(image_storage[persona_name]), media_type="image/png")
-    response.headers["Cache-Control"] = "public, max-age=86400"  # Example: cache for 1 day
-    return response
+async def get_persona_image(persona_name:str,request: Request,image_cache: ImageCache = Depends(get_imagecache)):
+    if not image_cache.Image128.get(persona_name, None):
+        await get_dialogue_participants(request,image_cache)
+    response = StreamingResponse(BytesIO(image_cache.Image128[persona_name]), media_type="image/png")
+    return response    
 
 # GET "/api/v1/user/persona/{persona_name}/thumbnail"
 @persona_router.get("/api/v1/persona/{persona_name}/thumbnail")
-async def get_persona_thumbnail(persona_name:str):
-    if not thumbnail_storage.get(persona_name):
-        await get_dialogue_participants()
-    response = StreamingResponse(BytesIO(thumbnail_storage[persona_name]), media_type="image/png")
-    response.headers["Cache-Control"] = "public, max-age=86400"  # Example: cache for 1 day
-    return response
+async def get_persona_thumbnail(persona_name:str,request: Request,image_cache: ImageCache = Depends(get_imagecache)):
+    if not image_cache.Image64.get(persona_name, None):
+        await get_dialogue_participants(request,image_cache)
+    response = StreamingResponse(BytesIO(image_cache.Image64[persona_name]), media_type="image/png")
+    return response    

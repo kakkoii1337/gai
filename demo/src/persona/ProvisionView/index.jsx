@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Backdrop, Button } from "@mui/material";
-import { themes, GeneralTab, useGeneralTab } from "gai-ui";
+import {
+    themes,
+    GeneralTab,
+    useGeneralTab,
+    httpPostAsync,
+    invalidatePersonasCache,
+} from "gai-ui";
 
 const ProvisionView = () => {
+    const dispatch = useDispatch();
     const theme = themes(true);
     const { deletePersonaAsync, savePersonaAsync, myPersona } = useGeneralTab();
     const [open, setOpen] = useState(true);
     const [refresh, setRefresh] = useState(true);
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
     const handleSave = async () => {
         await savePersonaAsync();
         setOpen(false);
-        console.log("Save");
+        await httpPostAsync("http://localhost:12033/api/v1/user/persona");
+
+        // invalidate personas cache
+        //setRefresh(true);
+        await sleep(1000);
+        invalidatePersonasCache(dispatch);
     };
     const handleDelete = async () => {
         await deletePersonaAsync();
         setRefresh(true);
+        invalidatePersonasCache(dispatch);
     };
     const isReady = myPersona?.AgentDescription;
     return (

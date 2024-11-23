@@ -15,6 +15,7 @@ from gai.lib.common.utils import get_app_path
 from gai.ttt.client.ttt_client import TTTClient
 from gai.lib.common.image_utils import bytes_to_imageurl
 from gai.lib.common.utils import get_gai_config
+from gai.mace.user.api.dependencies import get_imagecache, ImageCache
 
 # Implementations Below
 profile_router = APIRouter()
@@ -22,16 +23,21 @@ from gai.lib.common.utils import TTT_CONFIG
 
 ### POST /api/v1/persona/provision
 @profile_router.post("/api/v1/persona/provision")
-async def post_persona_provision(req: ProvisionAgentPydantic=Body(...)):
+async def post_persona_provision(req: ProvisionAgentPydantic=Body(...), image_cache: ImageCache = Depends(get_imagecache)):
     try:
-        persona_builder = PersonaBuilder(
+        builder = PersonaBuilder(
             provision=req
         )
-        persona=persona_builder.build()
+        persona=builder.build()
         persona.agent_profile.CustomPrompt
         app_path = get_app_path()
         export_dir=os.path.abspath(os.path.join(app_path,"persona",persona.agent_profile.Id))
-        await persona_builder.export_async(export_dir=export_dir)
+        await builder.export_async(export_dir=export_dir)
+        
+        await builder.import_async(import_dir=export_dir)
+        persona=builder.build()
+        image_cache.Image128[req.Name] = persona.agent_image.Image128
+        image_cache.Image64[req.Name] = persona.agent_image.Image64
         return {"message": "Agent provisioned successfully.","agent_id":persona.agent_profile.Id}
     except Exception as e:
         id = str(uuid.uuid4())

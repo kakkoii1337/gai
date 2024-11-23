@@ -18,7 +18,8 @@
                 "ms-python.debugpy",
                 "ms-vscode.js-debug",
                 "ms-toolsai.jupyter",
-                "KevinRose.vsc-python-indent"
+                "KevinRose.vsc-python-indent",
+                "esbenp.prettier-vscode"
             ]
         }
     },

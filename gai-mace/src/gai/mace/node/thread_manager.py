@@ -22,6 +22,10 @@ class ThreadManagerSingleton:
             ThreadManagerSingleton()
         return ThreadManagerSingleton._instance
 
+    def reset_registry(self):
+        with open(REGISTRY_FILE, "w") as f:
+            json.dump({}, f)
+
     def load_registry(self):
         if os.path.exists(REGISTRY_FILE):
             with open(REGISTRY_FILE, "r") as f:
