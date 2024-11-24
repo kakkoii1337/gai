@@ -38,9 +38,10 @@ Gaimace aims to achieve the following objectives:
 
 To run Gaimace, you need the following pre-requisites:
 
+-   Windows 11
 -   WSL2 with Ubuntu 22.04 LTS
 -   Docker
--   Visual Studio code
+-   Visual Studio Code
 
 ## Installation
 
@@ -59,8 +60,10 @@ gai init
 **Step 3.** Pull the Dolphin model. The model is around 4GB+ in size and will take some time to download.
 
 ```bash
-gai pull exllamav2-dolphin
+gai pull llamacpp-dolphin
 ```
+
+![gai pull llamacpp-dolphin](/docs/img/gai-pull-llamacpp-dolphin.png)
 
 **Step 4.** Clone this repository (https://github.com/kakkoii1337/gai)
 
@@ -68,7 +71,7 @@ gai pull exllamav2-dolphin
 
 **Step 6.** Click on bottom-left corner on the blue button and select "Reopen in Container"
 
-    ![Reopen in Container](/docs/img/dev-container.png)
+![Reopen in Container](/docs/img/dev-container.png)
 
 **Step 7.** Wait for the container to build the docker images.
 

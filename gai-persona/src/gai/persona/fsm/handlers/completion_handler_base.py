@@ -45,6 +45,7 @@ class CompletionHandlerBase:
                                 tools=tools_list,
                                 json_schema=json_schema,
                                 tool_choice=tool_choice,
+                                timeout=60
                                 )
                     for chunk in chunks:
                         decoded = chunk.extract()

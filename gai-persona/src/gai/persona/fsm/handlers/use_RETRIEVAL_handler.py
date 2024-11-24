@@ -51,8 +51,7 @@ class use_RETRIEVAL_handler:
         # Set default number of results to retrieve
         n_rag=4
         if hasattr(self, "n_rag"):
-            n_results = self.n_rag
-
+            n_rag = self.n_rag
         self.chunks = self.handle_RETRIEVAL(
             rag=rag, 
             collection_name=collection_name, 
@@ -60,19 +59,6 @@ class use_RETRIEVAL_handler:
             n_rag=n_rag)
         self.content=self.chunks
 
-        # Prepare for GENERATE (aka tool_prompt)
-        # system_prompt = """👩‍🔬, use only the information provided to you by the user to answer the user''s question. 
-        #     If the information is insufficient for 👩‍🔬 to derive an answer, just say ''I cannot find relevant information in my document store to answer the question correctly.'' 
-        #     👩‍🔬 is to provide an in-depth analysis to the question based only on the information provided by the user and nothing more.
-        #     👩‍🔬 will give a real-life example to support illustrating your point and contrasting it with a counter-example. 
-        #     👩‍🔬 will also proofread and edit the content before responding. 
-        #     👩‍🔬 will provide your own reasoned subjective perspective, noting where your view differs from or expands on the contents.
-        #     Rules:
-        #         - Consolidate the materials provided by the user and then organise them point by point.
-        #         - Provide as much details as you can extract from the materials provided by the user.
-        #         - Begin your report by saying `According to my document store,...`
-        #         - Always provide your answers in point form.
-        #     """
         tool_prompt = self.tool_prompts[self.tool_name]
         user_message = f"""
             Refer to the following context: `{self.content}`. 

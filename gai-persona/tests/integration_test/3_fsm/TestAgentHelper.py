@@ -28,7 +28,7 @@ class TestAgentHelper:
         doc_keywords=["Singapore","Chicken Rice","Food"]
         tools_config={
             "google": {
-                "tool_prompt":"👩‍🔬, use only the information provided to you by the user to answer the user''s question.\n            👩‍🔬, whenever possible, do not simply answer the question but try to be as informative as you can.\n            Remember, these information are scraped from the web so you may need to proofread and edit the content before responding.\n            👩‍🔬 will reply in point forms, precede each point with a newline \"\n\", and be precise in your articulation.\n            👩‍🔬 will provide your own reasoned subjective perspective, noting where your view differs from or expands on the contents.\n            Rules:\n                - Consolidate the materials provided by the user and then organise them point by point.\n                - Don't just answer the question, be as informative as you can. For example, provide and proofread some background information or fun-fact to support your answer and make it interesting.\n                - Begin your report by saying `According to my online research,...`\n                - Always provide your answers in point form.",
+                "tool_prompt":"👩‍🔬, use only the information provided to you by the user to answer the user''s question.\n\ud83d\udc69\u200d\ud83d\udd2c, whenever possible, do not simply answer the question but try to be as informative as you can.\n*  Remember, these information are scraped from the web so you may need to proofread and edit the content before responding.\n*  \ud83d\udc69\u200d\ud83d\udd2c will reply in point forms, precede each point with a newline \"\n\", and be precise in your articulation.\n*  \ud83d\udc69\u200d\ud83d\udd2c will provide your own reasoned subjective perspective, noting where your view differs from or expands on the contents.\n*  Rules:\n    - Consolidate the materials provided by the user and then organise them point by point.\n    - Don't just answer the question, be as informative as you can. For example, provide and proofread some background information or fun-fact to support your answer and make it interesting.\n    - Begin your report by saying `According to my online research,...`\n    - Always provide your answers in point form.",
                 "schema": {
                     "type": "function",
                     "function": {
@@ -95,66 +95,6 @@ class TestAgentHelper:
                 }
             }
         }
-        # tools_dict={ 
-        #     "google":{
-        #             "type": "function",
-        #             "function": {
-        #                 "name": "google",
-        #                 "description": "The 'google' function is a powerful tool that allows the AI to gather external information from the internet using Google search. It can be invoked when the AI needs to answer a question or provide information that requires up-to-date, comprehensive, and diverse sources which are not inherently known by the AI. For instance, it can be used to find current news, weather updates, latest sports scores, trending topics, specific facts, or even the current date and time. The usage of this tool should be considered when the user's query implies or explicitly requests recent or wide-ranging data, or when the AI's inherent knowledge base may not have the required or most current information. The 'search_query' parameter should be a concise and accurate representation of the information needed.",
-        #                 "arguments": {
-        #                     "type": "object",
-        #                     "properties": {
-        #                         "search_query": {
-        #                             "type": "string",
-        #                             "description": "The search query to search google with. For example, to find the current date or time, use 'current date' or 'current time' respectively."
-        #                         }
-        #                     },
-        #                     "required": ["search_query"]
-        #                 }
-        #             }
-        #         },
-        #     "retrieval":{
-        #         "type": "function",
-        #         "function": {
-        #             "name": "retrieval",
-        #             "description": f"""
-        #                 The `retrieval` function is a powerful tool that allows the AI to access articles outside of its knowledge domain from external sources. 
-        #                 The external articles are stored in an archive and organised by <titles>:\n{{ titles: [{doc_titles}] }}
-        #                 and <keywords>:
-        #                 {{ keywords: [{doc_keywords}] }}
-        #                 **IMPORTANT**: Use this tool when any of the <titles> or <keywords> may be relevant to user's question.
-        #                 The \'search_query\' parameter should be crafted in a way that it returns the most precise result based on the conversation context.
-        #             """,
-        #             "arguments": {
-        #                 "type": "object",
-        #                 "properties": {
-        #                     "search_query": {
-        #                         "type": "string",
-        #                         "description": """The most effective search query for semantic search that will return the most precise result."""
-        #                     }
-        #                 },
-        #                 "required": ["search_query"]
-        #             }
-        #         }
-        #     },
-        #     "text": {
-        #         "type": "function",
-        #         "function": {
-        #             "name": "text",
-        #             "description": "The 'text' function is the default catch-all function returned when none of the other tools are applicable.",
-        #             "arguments": {
-        #                 "type": "object",
-        #                 "properties": {
-        #                     "message": {
-        #                         "type": "string",
-        #                         "description": "The user's message."
-        #                     }
-        #                 },
-        #                 "required": ["message"]
-        #             }
-        #         }
-        #     }
-        # }
         return tools_config
 
     @staticmethod
@@ -162,7 +102,7 @@ class TestAgentHelper:
         agent_data=TestAgentHelper.CreateAgentData()
         ttt = TTTClient({
             "type": "ttt",
-            "url": "http://localhost:12031/gen/v1/chat/completions",
+            "url": "http://gai-ttt-svr:12031/gen/v1/chat/completions",
             "timeout": 60.0,
             "temperature":10e-9,
             "max_new_tokens": 1000,
@@ -170,8 +110,8 @@ class TestAgentHelper:
         })
         rag = RagClientAsync({
             "type": "rag",
-            "url": "http://localhost:12036/gen/v1/rag",
-            "ws_url": "ws://localhost:12036/gen/v1/rag/index-file/ws"
+            "url": "http://gai-ttt-svr:12036/gen/v1/rag",
+            "ws_url": "ws://gai-ttt-svr:12036/gen/v1/rag/index-file/ws"
         })
         tools_config=TestAgentHelper.CreateToolsConfig()
         fsm = AgentStateMachine(
