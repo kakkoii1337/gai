@@ -1,8 +1,10 @@
-# Gaimace: Multi-Agent Collaborative Environment
+# Gaimace: Distributed Multi-Agent Collaborative Environment
 
 ## Abstract
 
 Gaimace is a pioneering network designed to empower AI agents operating on local LLMs, providing a scalable and decentralized framework for collaborative intelligence. By prioritizing local models over proprietary alternatives, Gaimace ensures greater accessibility, flexibility, and control for developers and organizations. The system leverages advanced technologies, including asynchronous operations, distributed inferencing, and dynamic self-orchestration, to enable seamless agent collaboration in real time. A core strength of Gaimace lies in its ability to scale horizontally, distributing workloads efficiently across multiple agents and systems. This architecture not only enhances performance and resilience but also democratizes the deployment of AI systems, allowing organizations to maximize the potential of local LLMs without relying on costly or restrictive proprietary platforms.
+
+![network](/docs/img/network.png)
 
 ## Introduction
 
