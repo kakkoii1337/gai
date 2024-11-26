@@ -6,6 +6,7 @@ fi
 
 GAI_PERSONA="${HOME}/.gai/persona/nodes"
 if [ ! -d ${GAI_PERSONA} ]; then
+    mkdir -p $GAI_PERSONA
     cp -rp gai-mace/src/gai/mace/node/persona/data $GAI_PERSONA
 fi
 

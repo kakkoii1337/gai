@@ -30,6 +30,6 @@
     //         "moby": true
     //     }
     // },
-    "remoteUser": "kakkoii1337",
+    "remoteUser": "roylai",
     "postCreateCommand": "/bin/bash ${HOME}/postCreateCommand.sh"
 }
