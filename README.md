@@ -71,10 +71,20 @@ gai pull llamacpp-dolphin
 
 **Step 5.** Open in Visual Studio Code
 
-**Step 6.** Click on bottom-left corner on the blue button and select "Reopen in Container"
+**Step 6.** Update username
+
+.devcontainer/docker-compose.yml:
+
+-   Replace "kakkoii1337" in `USERNAME: "kakkoii1337"` with your username
+
+.devcontainer/devcontainer.json:
+
+-   Replace "kakkoii1337" in `"remoteUser": "kakkoii1337"` with your username
+
+**Step 7.** Click on bottom-left corner on the blue button and select "Reopen in Container"
 
 ![Reopen in Container](/docs/img/dev-container.png)
 
-**Step 7.** Wait for the container to build the docker images.
+**Step 8.** Wait for the container to build the docker images.
 
 Once the devcontainer is ready, refer to this link [Getting Started](/docs/01_getting_started.ipynb) and get started.
