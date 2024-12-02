@@ -1,6 +1,11 @@
 # COPY TO VOLUME
 GAI_CONFIG="${HOME}/.gai/gai.yml"
-cp gai.yml ${GAI_CONFIG}
+
+# Replace all occurrences of localhost:12031 with gai-ttt-svr:12031
+sed -i 's/localhost:12031/gai-ttt-svr:12031/g' "${GAI_CONFIG}"
+sed -i 's/localhost:12035/gai-tti-svr:12035/g' "${GAI_CONFIG}"
+sed -i 's/localhost:12036/gai-rag-svr:12036/g' "${GAI_CONFIG}"
+
 
 GAI_PERSONA="${HOME}/.gai/persona/nodes"
 if [ ! -d ${GAI_PERSONA} ]; then
@@ -22,5 +27,6 @@ pip install --upgrade \
     pytest \
     ipykernel \
     nest-asyncio
+chmod +x ./demo.sh
 cd demo
 yarn

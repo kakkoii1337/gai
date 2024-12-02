@@ -13,52 +13,42 @@
                 "GAIMACE_TTT": "http://gai-ttt-svr:12031",
             },
             "program": "${workspaceFolder}/gai-mace/src/gai/mace/main.py",
-            // "args": [
-            //     "--mode",
-            //     "user",
-            //     "--nats",
-            //     "nats://nats01:4222",
-            //     "--ttt",
-            //     "http://gai-ttt-svr",
-            //     "--tti",
-            //     "http://gai-tti-svr"
-            // ],
             "justMyCode": false,
         },
-        {
-            "name": "Python Debugger: Current File",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "cwd": "${fileDirname}",
-            "console": "integratedTerminal",
-            "justMyCode": false
-        },
-        {
-            "name": "Browser: Demo",
-            "request": "launch",
-            "type": "msedge",
-            "url": "http://localhost:5123",
-            "runtimeArgs": [
-                "--remote-debugging-port=9222"
-            ],
-            "webRoot": "${workspaceFolder}/demo"
-        },
-        {
-            "name": "Python Debugger: Christine",
-            "type": "debugpy",
-            "request": "launch",
-            "console": "integratedTerminal",
-            "env": {
-                "PYTHONUNBUFFERED": "1",
-                "GAIMACE_PERSONA": "Christine",
-                "GAIMACE_MODE": "node",
-                "GAIMACE_NATS": "nats://nats01:4222",
-                "GAIMACE_TTT": "http://gai-ttt-svr:12031",
-            },
-            "program": "${workspaceFolder}/gai-mace/src/gai/mace/main.py",
-            "args": [],
-            "justMyCode": false,
-        },
+        // {
+        //     "name": "Python Debugger: Current File",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "program": "${file}",
+        //     "cwd": "${fileDirname}",
+        //     "console": "integratedTerminal",
+        //     "justMyCode": false
+        // },
+        // {
+        //     "name": "Browser: Demo",
+        //     "request": "launch",
+        //     "type": "msedge",
+        //     "url": "http://localhost:5123",
+        //     "runtimeArgs": [
+        //         "--remote-debugging-port=9222"
+        //     ],
+        //     "webRoot": "${workspaceFolder}/demo"
+        // },
+        // {
+        //     "name": "Python Debugger: Christine",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "console": "integratedTerminal",
+        //     "env": {
+        //         "PYTHONUNBUFFERED": "1",
+        //         "GAIMACE_PERSONA": "Christine",
+        //         "GAIMACE_MODE": "node",
+        //         "GAIMACE_NATS": "nats://nats01:4222",
+        //         "GAIMACE_TTT": "http://gai-ttt-svr:12031",
+        //     },
+        //     "program": "${workspaceFolder}/gai-mace/src/gai/mace/main.py",
+        //     "args": [],
+        //     "justMyCode": false,
+        // },
     ]
 }

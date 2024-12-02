@@ -49,9 +49,11 @@ class MaceServer(GaiNetNode):
             "subject":subject,
             "data":data
         })
+        image_base64=None
+        if self.persona.agent_image:
+            image_bin=self.persona.agent_image.Image128
+            image_base64 = base64.b64encode(image_bin).decode('utf-8')
 
-        image_bin=self.persona.agent_image.Image128
-        image_base64 = base64.b64encode(image_bin).decode('utf-8')
         response = {
             "Name": self.persona.agent_profile.Name,
             "ClassName": self.persona.agent_profile.ClassType.ClassName,
