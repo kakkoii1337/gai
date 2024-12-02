@@ -1,8 +1,6 @@
 # COPY TO VOLUME
 GAI_CONFIG="${HOME}/.gai/gai.yml"
-if [ ! -f ${GAI_CONFIG} ]; then
-    cp gai.yml ${GAI_CONFIG}
-fi
+cp gai.yml ${GAI_CONFIG}
 
 GAI_PERSONA="${HOME}/.gai/persona/nodes"
 if [ ! -d ${GAI_PERSONA} ]; then
