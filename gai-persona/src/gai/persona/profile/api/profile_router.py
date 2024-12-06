@@ -81,8 +81,10 @@ async def get_persona_profile(persona_id:str):
     await builder.import_async(import_dir=import_dir)
     persona=builder.build()
     agent_profile = persona.agent_profile
-    image_bytes = persona.agent_image.Image128
-    agent_profile.ImageUrl = bytes_to_imageurl(img_data=image_bytes)["url"]
+    agent_profile.ImageUrl = None
+    if persona.agent_image:
+        image_bytes = persona.agent_image.Image128
+        agent_profile.ImageUrl = bytes_to_imageurl(img_data=image_bytes)["url"]
     return persona.agent_profile
 
 ### DELETE /api/v1/persona/profile

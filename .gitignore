@@ -35,5 +35,6 @@ build
 **/build
 **/*.jwk
 .vite/
+**/persistent_thread_registry.json
 
 

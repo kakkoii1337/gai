@@ -70,10 +70,10 @@ async def get_dialogue_participants(request: Request,imagecache: ImageCache = De
         desc=data["AgentDescription"]
         image_url = f"http://localhost:12033/api/v1/persona/{name}/image"
         thumbnail_url = f"http://localhost:12033/api/v1/persona/{name}/thumbnail"
-        if not imagecache.Image128.get(name, None):
+        if data.get("Image128", None) and not imagecache.Image128.get(name, None):
             # 128x128
             imagecache.Image128[name] = base64.b64decode(data["Image128"])
-        if not imagecache.Image64.get(name, None):
+        if data.get("Image64",None) and not imagecache.Image64.get(name, None):
             # 64x64
             imagecache.Image64[name] = base64.b64decode(data["Image64"])
 
@@ -100,7 +100,12 @@ async def get_persona_image(persona_name:str,request: Request,image_cache: Image
 # GET "/api/v1/user/persona/{persona_name}/thumbnail"
 @persona_router.get("/api/v1/persona/{persona_name}/thumbnail")
 async def get_persona_thumbnail(persona_name:str,request: Request,image_cache: ImageCache = Depends(get_imagecache)):
+    # If cache miss, fetch from MACE
     if not image_cache.Image64.get(persona_name, None):
         await get_dialogue_participants(request,image_cache)
+    # If still not found, return None
+    if not image_cache.Image64.get(persona_name, None):
+        return None
+    
     response = StreamingResponse(BytesIO(image_cache.Image64[persona_name]), media_type="image/png")
     return response    
