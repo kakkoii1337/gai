@@ -24,7 +24,7 @@ clients:
             - top_p
             - min_p
             - top_k
-            - max_new_tokens
+            - max_tokens
             - typical
             - n
             - token_repetition_penalty_max
@@ -33,7 +33,7 @@ clients:
             - beams
             - beam_length
         default:
-            max_new_tokens: 1000
+            max_tokens: 1000
         env:
             GAI_API_KEY: ${GAI_API_KEY}
     openai-ttt:

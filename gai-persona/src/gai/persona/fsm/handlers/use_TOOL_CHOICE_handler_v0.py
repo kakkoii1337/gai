@@ -138,7 +138,7 @@ class use_TOOL_CHOICE_handler:
                 messages=monologue_messages,
                 temperature=0,
                 json_schema=tool_choice_schema,
-                max_new_tokens=500, 
+                max_tokens=500, 
                 timeout = 60.0,
                 stream=False)
         except Exception as e:

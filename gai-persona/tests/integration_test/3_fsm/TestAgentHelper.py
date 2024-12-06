@@ -105,8 +105,7 @@ class TestAgentHelper:
             "url": "http://gai-ttt-svr:12031/gen/v1/chat/completions",
             "timeout": 60.0,
             "temperature":10e-9,
-            "max_new_tokens": 1000,
-            "max_tokens": 2000,
+            "max_tokens": 1000,
         })
         rag = RagClientAsync({
             "type": "rag",

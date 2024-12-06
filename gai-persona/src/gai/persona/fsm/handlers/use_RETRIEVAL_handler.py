@@ -70,8 +70,7 @@ class use_RETRIEVAL_handler:
             ).AddAssistantMessage().Build()
         self.tool_name="text"
         self.tool_choice="none"
-        self.max_new_tokens=2000
-        self.max_tokens=4000
+        self.max_tokens=2000
 
         if hasattr(self, "state"):
             logger.info({"state": self.state, "data": self.content})

@@ -22,7 +22,7 @@ services:
     #     command: python -m debugpy --listen 0.0.0.0:5678 main.py
 
     gai-ttt-svr:
-        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.6
+        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.10
         container_name: gai-ttt-svr
         environment:
             DEFAULT_GENERATOR: "ttt-llamacpp-mistral7b"

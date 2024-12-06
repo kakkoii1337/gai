@@ -22,7 +22,7 @@ services:
         command: sleep infinity
 
     gai-ttt-svr:
-        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.9
+        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.10
         container_name: gai-ttt-svr
         environment:
             DEFAULT_GENERATOR: "ttt-llamacpp-dolphin"

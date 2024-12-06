@@ -78,7 +78,6 @@ class use_GOOGLE_handler:
                                     stream=False,
                                     temperature=0,
                                     max_tokens=2000,
-                                    max_new_tokens=2000,
                                     tool_choice="none")
                         relevance=json.loads(relevance.extract()["content"])
                         result={"subject":subject,"topic":chunk, **relevance}                    
@@ -149,8 +148,7 @@ Based on the recap and search result as context, answer the user's following que
             ).AddAssistantMessage().Build()
         self.tool_name="text"
         self.tool_choice="none"
-        self.max_new_tokens=2000
-        self.max_tokens=4000
+        self.max_tokens=2000
 
         if hasattr(self, "state"):
             logger.info({"state": self.state, "data": self.content})
