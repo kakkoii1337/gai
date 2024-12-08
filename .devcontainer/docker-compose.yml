@@ -120,7 +120,7 @@ services:
         restart: unless-stopped
 
     gaimace-node-02:
-        image: kakkoii1337/gaimace:1.0.82
+        image: kakkoii1337/gaimace:1.0.83
         container_name: gaimace-node-02
         environment:
             LOG_LEVEL: "INFO"
@@ -138,7 +138,7 @@ services:
         restart: always
 
     gaimace-node-03:
-        image: kakkoii1337/gaimace:1.0.82
+        image: kakkoii1337/gaimace:1.0.83
         container_name: gaimace-node-03
         environment:
             LOG_LEVEL: "INFO"

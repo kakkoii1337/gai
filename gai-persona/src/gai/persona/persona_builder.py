@@ -369,20 +369,27 @@ class PersonaBuilder:
             if not os.path.exists(image_dir):
                 os.makedirs(image_dir)
             image = self.agent_image
-            with open(os.path.join(image_dir,"image.json"),"w") as f:
-                json.dump({
-                    "Id": image.Id,
-                    "AgentImagePrompt": image.AgentImagePrompt,
-                    "AgentImageNegativePrompt": image.AgentImageNegativePrompt
-                },f,indent=4)
-            with open(os.path.join(image_dir,"512x512.png"),"wb") as f:
-                f.write(BytesIO(image.Image512).getvalue())
-            with open(os.path.join(image_dir,"256x256.png"),"wb") as f:
-                f.write(BytesIO(image.Image256).getvalue())
-            with open(os.path.join(image_dir,"128x128.png"),"wb") as f:
-                f.write(BytesIO(image.Image128).getvalue())
-            with open(os.path.join(image_dir,"64x64.png"),"wb") as f:
-                f.write(BytesIO(image.Image64).getvalue())
+            if image:
+                with open(os.path.join(image_dir,"image.json"),"w") as f:
+                    json.dump({
+                        "Id": image.Id,
+                        "AgentImagePrompt": image.AgentImagePrompt,
+                        "AgentImageNegativePrompt": image.AgentImageNegativePrompt
+                    },f,indent=4)
+                if image.Image512:
+                    with open(os.path.join(image_dir,"512x512.png"),"wb") as f:
+                        f.write(BytesIO(image.Image512).getvalue())
+                if image.Image256:
+                    with open(os.path.join(image_dir,"256x256.png"),"wb") as f:
+                        f.write(BytesIO(image.Image256).getvalue())
+
+                if image.Image128:
+                    with open(os.path.join(image_dir,"128x128.png"),"wb") as f:
+                        f.write(BytesIO(image.Image128).getvalue())
+
+                if image.Image64:
+                    with open(os.path.join(image_dir,"64x64.png"),"wb") as f:
+                        f.write(BytesIO(image.Image64).getvalue())
 
         # Export agent flow
         if self.agent_flow:

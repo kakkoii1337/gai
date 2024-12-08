@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gaimace"
-version = "1.0.82"
+version = "1.0.83"
 description = "Refer to https://gai-labs.github.io/gai for more information"
 readme = "README.md"
 classifiers = [ "Programming Language :: Python :: 3.10", "Development Status :: 3 - Alpha", "License :: OSI Approved :: MIT License", "Intended Audience :: Science/Research", "Intended Audience :: Developers", "Operating System :: OS Independent", "Topic :: Software Development", "Topic :: Software Development :: Libraries :: Python Modules", "Topic :: Scientific/Engineering :: Artificial Intelligence",]
 requires-python = ">=3.10"
-dependencies = [ "gai-sdk>=1.0.80", "pydantic-settings>=2.6.1",]
+dependencies = [ "gai-sdk>=1.0.84", "pydantic-settings>=2.6.1",]
 [[project.authors]]
 name = "kakkoii1337"
 email = "kakkoii1337@gmail.com"

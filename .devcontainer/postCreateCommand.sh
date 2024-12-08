@@ -10,7 +10,7 @@ sed -i 's/localhost:12036/gai-rag-svr:12036/g' "${GAI_CONFIG}"
 GAI_PERSONA="${HOME}/.gai/persona/nodes"
 if [ ! -d ${GAI_PERSONA} ]; then
     mkdir -p $GAI_PERSONA
-    cp -rp gai-mace/src/gai/mace/node/persona/data $GAI_PERSONA
+    cp -rp gai-mace/src/gai/mace/node/persona/data/* $GAI_PERSONA
 fi
 
 python -m venv ~/.venv

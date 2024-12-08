@@ -94,6 +94,9 @@ async def get_dialogue_participants(request: Request,imagecache: ImageCache = De
 async def get_persona_image(persona_name:str,request: Request,image_cache: ImageCache = Depends(get_imagecache)):
     if not image_cache.Image128.get(persona_name, None):
         await get_dialogue_participants(request,image_cache)
+    # If still not found, return None
+    if not image_cache.Image128.get(persona_name, None):
+        return None
     response = StreamingResponse(BytesIO(image_cache.Image128[persona_name]), media_type="image/png")
     return response    
 

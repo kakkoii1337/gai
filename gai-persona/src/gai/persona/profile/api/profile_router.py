@@ -36,8 +36,9 @@ async def post_persona_provision(req: ProvisionAgentPydantic=Body(...), image_ca
         
         await builder.import_async(import_dir=export_dir)
         persona=builder.build()
-        image_cache.Image128[req.Name] = persona.agent_image.Image128
-        image_cache.Image64[req.Name] = persona.agent_image.Image64
+        if persona.agent_image:
+            image_cache.Image128[req.Name] = persona.agent_image.Image128
+            image_cache.Image64[req.Name] = persona.agent_image.Image64
         return {"message": "Agent provisioned successfully.","agent_id":persona.agent_profile.Id}
     except Exception as e:
         id = str(uuid.uuid4())
