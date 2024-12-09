@@ -1,42 +1,12 @@
 # Gaimace: Distributed Multi-Agent Collaborative Environment
 
-## Abstract
-
-Gaimace is a pioneering network designed to empower AI agents operating on local LLMs, providing a scalable and decentralized framework for collaborative intelligence. By prioritizing local models over proprietary alternatives, Gaimace ensures greater accessibility, flexibility, and control for developers and organizations. The system leverages advanced technologies, including asynchronous operations, distributed inferencing, and dynamic self-orchestration, to enable seamless agent collaboration in real time. A core strength of Gaimace lies in its ability to scale horizontally, distributing workloads efficiently across multiple agents and systems. This architecture not only enhances performance and resilience but also democratizes the deployment of AI systems, allowing organizations to maximize the potential of local LLMs without relying on costly or restrictive proprietary platforms.
+The operational costs of autonomous AI agents, primarily driven by the multi-turn, interrogative nature of large language models (LLMs), may eventually pose a significant barrier to their adoption. These costs are further exacerbated by privacy concerns arising from the reliance on external LLM service providers, limiting both cost-efficiency and user control. While the emergence of local LLMs, coupled with the rise in AI-capable consumer hardware, holds the potential to address these challenges by enabling the deployment of AI agents on local hardware—thereby reducing operational costs and privacy risks—most existing multi-agent systems are neither network-ready nor optimized for local LLMs. This limitation hinders the ability to fully leverage the potential of local AI agents for diverse problem-solving scenarios. This paper introduces Gaimace, a generative AI distributed multi-agent collaborative environment designed to be network-ready, local-first, and horizontally scalable. It addresses the need for a system that can utilize local LLMs and AI-capable hardware effectively, ensuring privacy and reducing operational costs. By democratizing the use of AI agents, Gaimace enhances user control and flexibility in diverse problem-solving scenarios.
 
 ![network](/docs/img/network.png)
 
-## Introduction
-
-The rise of Generative AI, particularly Large-Language Models (LLMs), has transformed modern computing by enabling intelligent systems to automate tasks, analyze data, and make decisions with unprecedented speed and accuracy. However, the utilization of LLMs is largely divided into two paradigms: proprietary cloud-based platforms and local deployments.
-
-Proprietary LLMs, built on extensive datasets and advanced infrastructure, deliver state-of-the-art performance with high accuracy and versatility across diverse tasks. However, their benefits come with significant trade-offs, including high costs, data privacy concerns, and dependency on external platforms. In contrast, local LLMs offer greater control, cost-effectiveness, and enhanced data privacy but are constrained by limited computational resources, smaller training datasets, and reduced scalability. These limitations become more pronounced as generative AI research increasingly focuses on agentic systems, which emphasize the autonomous collaboration of AI agents to tackle complex, distributed tasks.
-
-Current frameworks for multi-agent interaction primarily rely on powerful proprietary models to achieve effectiveness, despite their multi-agent design. These frameworks typically operate on centralized architectures, which depend on robust infrastructure and proprietary platforms. Conversely, while local LLMs offer an open-source alternative, their limited computational capabilities prevent them from effectively powering multiple agents on a single hardware setup, further emphasizing the scalability and efficiency gap between proprietary and local approaches.
-
-This paper introduces Gaimace (Generative AI Multi-Agent Collaborative Environment), a decentralized framework designed to harness local LLMs within a distributed multi-agent network, with horizontal scalability as its defining strength. Gaimace enables seamless collaboration across multiple local models by leveraging established methodologies such as asynchronous messaging, dynamic self-orchestration, and hybrid agent deployment, bridging the gap between the computational power of centralized proprietary systems and the control, cost-effectiveness, and privacy of local deployments. By focusing on horizontal scalability, Gaimace dynamically incorporates additional agents to ensure robust performance without reliance on monolithic, high-powered infrastructure.
-
-### Objectives
-
-Gaimace aims to achieve the following objectives:
-
-1. **Optimize Operations for Local LLMs**: Facilitate and optimize the deployment of AI agents powered by local LLMs to reduce reliance on proprietary platforms. This ensures greater control, cost-effectiveness, and compatibility with localized resources, empowering organizations to leverage their existing infrastructure fully.
-
-2. **Enable Independent Agent Operations**: Establish a network where AI agents operate asynchronously, functioning independently without interdependencies. This ensures efficient parallel task execution, improves responsiveness to real-time events, and enables dynamic adaptation to evolving workloads and conditions.
-
-3. **Promote Diversity with Agent Personas**: Treat AI agents as distinct personas rather than simplistic task executors, fostering diverse interaction dynamics. By equipping agents with unique personas, Gaimace enables varied outcomes during collaborative efforts, enhancing problem-solving versatility.
-
-4. **Develop a Robust Distributed Inferencing Network**: Build a distributed inferencing framework inspired by streaming data architectures like Apache Kafka, tailored for AI agent communication. This integrates asynchronous messaging and micro-service architecture to ensure resilience, scalability, and efficient resource utilization across geographically dispersed environments.
-
-5. **Achieve Dynamic Self-Orchestration**: Automate the sequencing of agent interactions, dynamically optimizing communication pathways based on real-time data. This objective ensures efficient task execution, adaptability to changing conditions, and resilience to disruptions.
-
-6. **Safeguard Data Privacy and Enable Resource Sharing**: Implement a privacy-preserving framework that allows agents to retain control over localized data while sharing only relevant information on a need-to-know basis. This ensures effective collaboration without compromising data security.
-
-7. **Ensure Scalable and Efficient Workload Distribution**: Enable horizontal scalability by distributing workloads efficiently across multiple agents and systems. This enhances performance, fault tolerance, and resilience, allowing the system to adapt to increased demands while maintaining operational efficiency.
-
-8. **Augment Local Agents with Cloud-Based Deployment**: Integrate cloud-based dynamic agent deployment to complement locally deployed agents. Real-time provisioning, activation, and scaling of agents leverage both local and cloud resources, ensuring scalability, resilience, and cost-effectiveness for complex, large-scale distributed AI applications.
-
 ## Pre-Requisites
+
+The following instructions is designed for setting up Gaimace on Windows 11 with WSL2 and Ubuntu 22.04 LTS. The instructions may vary for other operating systems.
 
 To run Gaimace, you need the following pre-requisites:
 
@@ -47,19 +17,65 @@ To run Gaimace, you need the following pre-requisites:
 
 ## Installation
 
-**Step 1.** Open Terminal and install gai-sdk
+The following instructions are available in video at this youtube [link](https://www.youtube.com/watch?v=3jXOlpO_cjg).
+
+### Step 1. Setup Environment
+
+a) Open WSL2 terminal and create a virtual environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+b) Install gai-sdk
 
 ```bash
 pip install gai-sdk
 ```
 
-**Step 2.** Initialize Gai directory
+c) Initialize Gai directory
 
 ```bash
 gai init
 ```
 
-**Step 3.** Pull the Dolphin model. The model is around 4GB+ in size and will take some time to download.
+### Step 2. Download and Open Repository
+
+a) Clone gai repository
+
+```bash
+git clone https://github.com/kakkoii1337/gai
+```
+
+b) Open in Visual Studio Code
+
+```bash
+cd gai
+code .
+```
+
+### Step 3. Open in DevContainer
+
+a) Open **.devcontainer/devcontainer.json** and replace "kakkoii1337" with your username.
+
+For example, if your username is "user1234", replace the field "remoteUser" with "user1234".
+
+b) Open **.devcontainer/docker-compose.yml** and replace "kakkoii1337" with your username.
+
+For example, if your username is "user1234", replace the field "USERNAME" with "user1234".
+
+c) Click on the bottom-left corner on the blue button and select "Reopen in Container"
+
+![Reopen in Container](/docs/img/dev-container.png)
+
+**NOTE:** Docker will pull or build the images required for the devcontainer. This may take approx 10 minutes to complete.
+
+### Step 4. Download Model
+
+a) From Visual Studio Code, open a new terminal and pull the Dolphin model.
+
+**NOTE:** The model is around 4GB+ in size and will take approx 10 min to download.
 
 ```bash
 gai pull llamacpp-dolphin
@@ -67,24 +83,28 @@ gai pull llamacpp-dolphin
 
 ![gai pull llamacpp-dolphin](/docs/img/gai-pull-llamacpp-dolphin.png)
 
-**Step 4.** Clone this repository (https://github.com/kakkoii1337/gai)
+### Step 5. Start the API Server
 
-**Step 5.** Open in Visual Studio Code
+a) From Visual Studio Code, Press F5 to start the API server.
 
-**Step 6.** Update username
+### Step 6. Start the Web Server
 
-.devcontainer/docker-compose.yml:
+a) From Visual Studio Code, open a new terminal and start the web server.
 
--   Replace "kakkoii1337" in `USERNAME: "kakkoii1337"` with your username
+```bash
+. demo.sh
+```
 
-.devcontainer/devcontainer.json:
+### Step 7. Test and Demo
 
--   Replace "kakkoii1337" in `"remoteUser": "kakkoii1337"` with your username
+a) Open a web browser and navigate to http://localhost:5123
 
-**Step 7.** Click on bottom-left corner on the blue button and select "Reopen in Container"
+b) Type the in the chat box: Hello everyone! Please introduce yourselves and tell me about your capabilities.
 
-![Reopen in Container](/docs/img/dev-container.png)
+c) Click on the "loop" button to fetch group responses.
 
-**Step 8.** Wait for the container to build the docker images.
+## Next Step
 
-Once the devcontainer is ready, refer to this link [Getting Started](/docs/01_getting_started.ipynb) and get started.
+-   Explore Gaimace Notebooks:
+    -   [Geting Started](./docs/01_getting_started.ipynb)
+-   [Gaimace Documentation](https://gai.readthedocs.io/en/latest/)
