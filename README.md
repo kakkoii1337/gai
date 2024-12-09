@@ -17,7 +17,7 @@ To run Gaimace, you need the following pre-requisites:
 
 ## Installation
 
-The following instructions are available in video at this youtube [link](https://www.youtube.com/watch?v=3jXOlpO_cjg).
+The following instructions are available in video at this youtube [link](https://www.youtube.com/watch?v=Z5I0S6zGVVc).
 
 ### Step 1. Setup Environment
 
@@ -34,7 +34,7 @@ b) Install gai-sdk
 pip install gai-sdk
 ```
 
-c) Initialize Gai directory
+c) Initialize Gai
 
 ```bash
 gai init
