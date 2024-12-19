@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
+from gai.persona.profile.pydantic.AgentLLMPydantic import AgentLLMPydantic
 
 class ProvisionAgentPydantic(BaseModel):
     Name: str= Field(..., max_length=255)
@@ -10,3 +11,4 @@ class ProvisionAgentPydantic(BaseModel):
     AgentDescription: Optional[str] = "Hi there! I am an Assistant class generative AI agent."
     AgentImageStyles: Optional[list] = []
     ImageDataUrl: Optional[str] = None 
+    LLM: Optional[AgentLLMPydantic] = None

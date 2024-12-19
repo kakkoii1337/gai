@@ -22,7 +22,7 @@ from gai.persona.docs.system_docs_mgr import SystemDocsMgr
 from gai.rag.client.rag_client_async import RagClientAsync
 from gai.persona.docs.pydantic.FlattenedAgentDocumentPydantic import FlattenedAgentDocumentPydantic
 from gai.lib.common.errors import DuplicatedDocumentException
-from gai.lib.common.utils import RAG_CONFIG
+from gai.lib.config.config_utils import get_client_config
 
 # Implementations Below
 document_router = APIRouter()
@@ -63,7 +63,8 @@ async def post_document_step_header(persona_id:str, agent_document: FlattenedAge
         raise HTTPException(status_code=400, detail="FileName and AgentId are required")
 
     try:
-        rag=RagClientAsync(RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(rag_config)
 
         temp_dir = os.path.join("/tmp", persona_id)
         tempfile_path = os.path.join(temp_dir, agent_document.FileName)        
@@ -105,7 +106,8 @@ async def post_document_step_split(
         raise HTTPException(status_code=400, detail="agent_id and document_id are required")
     
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)
 
         logger.info(f"document_router.post_document_step_split: creating header...")
 
@@ -144,7 +146,8 @@ async def post_document_step_index(persona_id:str,
             await active_websocket.send_text(json.dumps(status))
 
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)        
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)        
         result = await rag.step_index_async(
             collection_name=persona_id,
             document_id=req.document_id,
@@ -163,8 +166,9 @@ async def post_document_step_index(persona_id:str,
 ### GET /api/v1/persona/{persona_id}/documents
 @document_router.get("/api/v1/persona/{persona_id}/documents")
 async def get_persona_document_list(persona_id:str):
+    rag_config = get_client_config("rag")
     mgr = SystemDocsMgr(
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag=RagClientAsync(config=rag_config)
     )
 
     docs = await mgr.list_documents_async(persona_id=persona_id)
@@ -181,7 +185,8 @@ async def get_persona_document( persona_id,document_id):
         raise HTTPException(status_code=400, detail="document_id is required")
     
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)
         chunk = await rag.get_document_header_async(collection_name=persona_id,document_id=document_id)
         return chunk
     except Exception as e:
@@ -198,7 +203,8 @@ async def get_persona_document_chunk_list( persona_id,chunkgroup_id):
         raise HTTPException(status_code=400, detail="chunkgroup_id is required")
     
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)
         return await rag.list_chunks_async(chunkgroup_id=chunkgroup_id)
     except Exception as e:
         id = str(uuid.uuid4())
@@ -214,7 +220,8 @@ async def get_persona_document_chunk( persona_id,chunk_id):
         raise HTTPException(status_code=400, detail="chunk_id is required")
     
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)
         chunk = await rag.get_document_chunk_async(collection_name=persona_id,chunk_id=chunk_id)
         return chunk
     except Exception as e:
@@ -231,7 +238,8 @@ async def delete_persona_document( persona_id, document_id):
         raise HTTPException(status_code=400, detail="persona_id and document_id are required")
 
     try:
-        rag=RagClientAsync(config=RAG_CONFIG)
+        rag_config = get_client_config("rag")
+        rag=RagClientAsync(config=rag_config)
         await rag.delete_document_async(persona_id, document_id)
         return {"message":f"document {document_id} deleted"}
     except DocumentNotFoundException:

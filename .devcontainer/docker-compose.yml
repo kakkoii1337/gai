@@ -22,7 +22,7 @@ services:
         command: sleep infinity
 
     gai-ttt-svr:
-        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.10
+        image: kakkoii1337/gai-ttt-svr-llamacpp:1.0.13
         container_name: gai-ttt-svr
         environment:
             DEFAULT_GENERATOR: "ttt-llamacpp-dolphin"
@@ -43,7 +43,7 @@ services:
         command: python -m debugpy --listen 0.0.0.0:5678 main.py
 
     # gai-ttt-svr:
-    #     image: kakkoii1337/gai-ttt-svr-exllamav2:1.0.51
+    #     image: kakkoii1337/gai-ttt-svr-exllamav2:1.0.54
     #     container_name: gai-ttt-svr
     #     environment:
     #         DEFAULT_GENERATOR: "ttt-exllamav2-dolphin"
@@ -82,7 +82,7 @@ services:
             - ~/.gai/models/VAE:/stable-diffusion-webui/models/VAE
 
     # gai-rag-svr:
-    #     image: kakkoii1337/gai-rag-svr:1.0.18
+    #     image: kakkoii1337/gai-rag-svr:1.0.20
     #     container_name: gai-rag-svr
     #     environment:
     #         DEFAULT_GENERATOR: "rag-instructor-sentencepiece"

@@ -11,7 +11,7 @@ from gai.persona.images.pydantic.GenerateImagePydantic import GenerateImagePydan
 from gai.tti.client.tti_client import TTIClient
 from gai.persona.images.system_images_mgr import SystemImagesMgr
 from gai.lib.common.image_utils import bytes_to_imageurl
-from gai.lib.common.utils import TTI_CONFIG
+from gai.lib.config.config_utils import get_client_config
 
 # Implementations Below
 image_router = APIRouter()
@@ -20,8 +20,9 @@ image_router = APIRouter()
 @image_router.post("/api/v1/persona/image")
 async def post_persona_image(req: GenerateImagePydantic=Body(...)):
     try:
+        tti_config = get_client_config("tti")
         mgr = SystemImagesMgr(
-            tti_client=TTIClient(config=TTI_CONFIG)
+            tti_client=TTIClient(config=tti_config)
         )
         if not req.AgentId:
             req.AgentId = "00000000-0000-0000-0000-000000000000"
@@ -46,8 +47,9 @@ async def post_persona_image(req: GenerateImagePydantic=Body(...)):
 ### GET /api/v1/persona/profile
 @image_router.get("/api/v1/persona/image/{size}/{persona_id}")
 async def get_persona_image(size:str,persona_id:str):
+    tti_config = get_client_config("tti")
     mgr = SystemImagesMgr(
-        tti_client=TTIClient(config=TTI_CONFIG)
+        tti_client=TTIClient(config=tti_config)
     )
     try:
         image_bytes = mgr.get_agent_image(agent_id=persona_id,size=size)

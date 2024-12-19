@@ -14,12 +14,11 @@ from gai.persona.persona_builder import PersonaBuilder
 from gai.lib.common.utils import get_app_path
 from gai.ttt.client.ttt_client import TTTClient
 from gai.lib.common.image_utils import bytes_to_imageurl
-from gai.lib.common.utils import get_gai_config
 from gai.mace.user.api.dependencies import get_imagecache, ImageCache
 
 # Implementations Below
 profile_router = APIRouter()
-from gai.lib.common.utils import TTT_CONFIG
+from gai.lib.config.config_utils import get_client_config
 
 ### POST /api/v1/persona/provision
 @profile_router.post("/api/v1/persona/provision")
@@ -49,7 +48,10 @@ async def post_persona_provision(req: ProvisionAgentPydantic=Body(...), image_ca
 @profile_router.post("/api/v1/persona/description")
 async def post_persona_description(req: GenerateDescriptionPydantic=Body(...)):
     try:
-        ttt_client=TTTClient(config=TTT_CONFIG)
+        ttt_config = get_client_config(category="ttt",engine=req.LLM.Engine,model=req.LLM.Model)
+        if req.LLM.Engine=="openai":
+            ttt_config.env["OPENAI_API_KEY"]=req.LLM.ApiKey
+        ttt_client=TTTClient(ttt_config)
         response = ttt_client(messages=
             f"""system: You are a role-play character generator and you are tasked to create a self-introduction for a fictitious AI character based on the name and personality traits provided by the user. You should assimilate the traits into the self-intro and stay in character.
              user: Generate persona with name {req.Name} and traits{str(req.AgentTraits)}.
